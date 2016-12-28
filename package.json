@@ -1,0 +1,42 @@
+{
+  "name": "chorus-js",
+  "version": "0.0.0",
+  "description": "A Chorus Javascript Client",
+  "main": "lib/index.js",
+  "scripts": {
+    "start": "webpack-dev-server --progress --colors --inline --hot --quiet",
+    "prebuild": "npm run clean",
+    "build": "babel ./src --out-dir ./lib --ignore=./**/*.test.js",
+    "test": "npm run lint",
+	"preversion": "npm run test",
+	"version": "npm run build",
+	"postversion": "git push --follow-tags",
+    "lint": "eslint . --ignore-pattern lib/",
+    "clean": "rimraf ./lib",
+    "hook": "cp ./git-hooks/* ./.git/hooks"
+  },
+  "dependencies": {
+    "uuid": "^3.0.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-loader": "^6.2.10",
+    "babel-preset-es2015": "^6.18.0",
+    "eslint": "^3.12.2",
+    "eslint-config-airbnb-base": "^11.0.0",
+    "eslint-plugin-import": "^2.2.0",
+	"expect": "^1.20.2",
+    "webpack": "^1.14.0",
+    "webpack-dev-server": "^1.16.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Chorus-bdd/Chorus-JS.git"
+  },
+  "author": "Benoît Grélard <benoit.grelard@gmail.com> (http://www.artisologic.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Chorus-bdd/Chorus-JS/issues"
+  },
+  "homepage": "https://github.com/Chorus-bdd/Chorus-JS#readme"
+}
