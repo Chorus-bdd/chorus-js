@@ -1,0 +1,6 @@
+/example
+/git-hooks
+.*
+*.log
+CONTRIBUTING.md
+webpack.config.js
