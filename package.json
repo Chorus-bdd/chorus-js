@@ -7,7 +7,8 @@
     "start": "webpack-dev-server --progress --colors --inline --hot --quiet",
     "prebuild": "npm run clean",
     "build": "babel ./src --out-dir ./lib --ignore=./**/*.test.js",
-    "test": "npm run lint && npm run typecheck",
+    "test": "npm run lint && npm run typecheck && npm run test:unit",
+    "test:unit": "jest",
     "preversion": "npm run test",
     "version": "npm run build",
     "postversion": "git push --follow-tags",
@@ -31,6 +32,7 @@
     "eslint-plugin-import": "^2.2.0",
     "expect": "^1.20.2",
     "flow-bin": "^0.37.4",
+    "jest": "^18.1.0",
     "webpack": "^1.14.0",
     "webpack-dev-server": "^1.16.2"
   },
