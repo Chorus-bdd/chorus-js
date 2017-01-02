@@ -12,7 +12,7 @@ To begin developing follow the steps below.
 1. Install and set up dependencies and git hooks:
 
    ```bash
-   npm Install
+   npm install
    npm run hook
    ```
 

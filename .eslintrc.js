@@ -2,7 +2,13 @@ module.exports = {
 	extends: [
 		'eslint-config-airbnb-base',
 		'eslint-config-airbnb-base/rules/strict',
-	].map(require.resolve),
+	].map(require.resolve).concat('plugin:flowtype/recommended'),
+
+	parser: 'babel-eslint',
+
+	plugins: [
+		'flowtype',
+	],
 
 	rules: {
 		// es6
