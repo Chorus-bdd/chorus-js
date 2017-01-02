@@ -1,44 +1,58 @@
-import makeUUID from 'uuid/v4';
-import { connect, publishStep, stepsAligned, stepSucceeded, stepFailed } from './messages';
+// @flow
+
+import uuid from 'uuid';
 
 
-export default function (clientId, clientDescription = '') {
+export default function (clientId: string, clientDescription: string = ''): ChorusClient {
 	if (!clientId) {
 		throw new Error('Please provide `clientId`');
 	}
 
-	let _socket = null;
-	const _callbacks = {};
+	let _socket: WebSocket;
+	const _callbacks: {[stepId: string]: (...args: Array<string>) => number | string | void} = {};
 
-	function _sendMessage(message) {
+	function _sendMessage(message: OutgoingMessage): void {
+		if (!_socket) { return; }
 		_socket.send(
 			JSON.stringify(message),
 		);
 	}
 
-	function _onMessage(event) {
-		const message = JSON.parse(event.data);
+	function _onMessage(event: Event) {
+		if (typeof event.data !== 'string') {
+			throw new Error('Expecting websocket message data to be of type string');
+		}
+		const incomingMessage: ExecuteStepMessage = JSON.parse(event.data);
 
-		if (message.type === 'EXECUTE_STEP') {
-			const callback = _callbacks[message.stepId];
-			if (callback) {
-				const { stepId, executionId, contextVariables } = message;
-				try {
-					const result = callback(...message.arguments);
-					_sendMessage(
-						stepSucceeded(clientId, stepId, executionId, result, contextVariables),
-					);
-				} catch (e) {
-					_sendMessage(
-						stepFailed(clientId, stepId, executionId, e.message),
-					);
-				}
+		if (incomingMessage.type === 'EXECUTE_STEP') {
+			const callback = _callbacks[incomingMessage.stepId];
+			const { stepId, executionId, contextVariables } = incomingMessage;
+
+			try {
+				const result: number | string | void = callback(...incomingMessage.arguments);
+				const message: StepSucceededMessage = {
+					type: 'STEP_SUCCEEDED',
+					chorusClientId: clientId,
+					stepId,
+					executionId,
+					result,
+					contextVariables,
+				};
+				_sendMessage(message);
+			} catch (error) {
+				const message: StepFailedMessage = {
+					type: 'STEP_FAILED',
+					chorusClientId: clientId,
+					stepId,
+					executionId,
+				};
+				_sendMessage(message);
 			}
 		}
 	}
 
-	return {
-		open(url) {
+	const client: ChorusClient = {
+		open(url: string): Promise<Event> {
 			return new Promise((resolve, reject) => {
 				_socket = new WebSocket(url);
 				_socket.addEventListener('open', resolve);
@@ -47,28 +61,48 @@ export default function (clientId, clientDescription = '') {
 			});
 		},
 
-		close() {
+		close(): void {
+			if (!_socket) { return; }
 			_socket.close();
 		},
 
-		connect() {
-			_sendMessage(
-				connect(clientId, clientDescription),
-			);
+		connect(): void {
+			const message: ConnectMessage = {
+				type: 'CONNECT',
+				chorusClientId: clientId,
+				description: clientDescription,
+			};
+			_sendMessage(message);
 		},
 
-		publishStep(pattern, callback, technicalDescription, pendingMessage) {
-			const stepId = makeUUID();
+		publishStep(
+			pattern: string,
+			callback: Function,
+			technicalDescription?: string,
+			pendingMessage?: string,
+		): void {
+			const stepId = uuid.v4();
 			_callbacks[stepId] = callback;
-			_sendMessage(
-				publishStep(clientId, stepId, pattern, pendingMessage, technicalDescription),
-			);
+
+			const message: PublishStepMessage = {
+				type: 'PUBLISH_STEP',
+				chorusClientId: clientId,
+				stepId,
+				pattern,
+				pendingMessage,
+				technicalDescription,
+			};
+			_sendMessage(message);
 		},
 
-		stepsAligned() {
-			_sendMessage(
-				stepsAligned(clientId),
-			);
+		stepsAligned(): void {
+			const message: StepsAlignedMessage = {
+				type: 'STEPS_ALIGNED',
+				chorusClientId: clientId,
+			};
+			_sendMessage(message);
 		},
 	};
+
+	return client;
 }

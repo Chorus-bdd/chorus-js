@@ -1,24 +1,34 @@
+// @flow
+
 import expect from 'expect';
 import client, { clientOpened } from './client';
 
 
-export default function (rootElem) {
-	let _value = 0;
+type Counter = {
+	destroy(): void,
+};
 
-	const _decrementButton = rootElem.querySelector('.decrement');
-	const _incrementButton = rootElem.querySelector('.increment');
-	const _valueSpan = rootElem.querySelector('.value');
+export default function (rootElem: HTMLElement): Counter {
+	let _value: number = 0;
 
-	function _setValue(value) {
-		_value = value;
-		_valueSpan.innerText = value;
+	const _decrementButton: HTMLElement | null = rootElem.querySelector('.decrement');
+	const _incrementButton: HTMLElement | null = rootElem.querySelector('.increment');
+	const _valueSpan: HTMLElement | null = rootElem.querySelector('.value');
+
+	if (!_decrementButton || !_incrementButton || !_valueSpan) {
+		throw new Error('Cannot find necessary elements');
 	}
 
-	function _handleDecrementButtonClick() {
+	function _setValue(value: number): void {
+		_value = value;
+		_valueSpan.innerText = String(value);
+	}
+
+	function _handleDecrementButtonClick(): void {
 		_setValue(_value - 1);
 	}
 
-	function _handleIncrementButtonClick() {
+	function _handleIncrementButtonClick(): void {
 		_setValue(_value + 1);
 	}
 
@@ -38,7 +48,7 @@ export default function (rootElem) {
 	});
 
 	return {
-		destroy() {
+		destroy(): void {
 			_decrementButton.removeEventListener('click', _handleDecrementButtonClick);
 			_incrementButton.removeEventListener('click', _handleIncrementButtonClick);
 		},

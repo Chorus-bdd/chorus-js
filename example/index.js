@@ -1,5 +1,7 @@
+// @flow
+
 import createCounter from './createCounter';
 
 
-const rootElem = document.querySelector('.counter');
-createCounter(rootElem);
+const rootElem: HTMLElement | null = document.querySelector('.counter');
+createCounter(rootElem || document.body);
