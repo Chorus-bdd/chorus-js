@@ -1,7 +1,28 @@
 // @flow
-
 import uuid from 'uuid';
+import type {
+	ConnectMessage,
+	PublishStepMessage,
+	StepsAlignedMessage,
+	StepSucceededMessage,
+	StepFailedMessage,
+	OutgoingMessage,
+	ExecuteStepMessage,
+} from './messages.type';
 
+
+export interface ChorusClient {
+	open(url: string): Promise<Event>,
+	close(): void,
+	connect(): void,
+	publishStep(
+		pattern: string,
+		callback: (...args: Array<string>) => number | string | void,
+		technicalDescription?: string,
+		pendingMessage?: string,
+	): void,
+	stepsAligned(): void,
+}
 
 export default function (clientId: string, clientDescription?: string = ''): ChorusClient {
 	if (!clientId) {

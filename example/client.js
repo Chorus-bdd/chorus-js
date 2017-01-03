@@ -1,5 +1,4 @@
 // @flow
-
 import createClient from '../src';
 
 

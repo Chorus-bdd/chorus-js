@@ -1,12 +1,10 @@
-/* eslint-disable no-unused-vars */
-
-type ConnectMessage = {|
+export type ConnectMessage = {|
 	type: 'CONNECT',
 	chorusClientId: string,
 	description: string,
 |}
 
-type PublishStepMessage = {|
+export type PublishStepMessage = {|
 	type: 'PUBLISH_STEP',
 	chorusClientId: string,
 	stepId: string,
@@ -15,12 +13,12 @@ type PublishStepMessage = {|
 	technicalDescription?: string,
 |}
 
-type StepsAlignedMessage = {|
+export type StepsAlignedMessage = {|
 	type: 'STEPS_ALIGNED',
 	chorusClientId: string,
 |}
 
-type StepSucceededMessage = {|
+export type StepSucceededMessage = {|
 	type: 'STEP_SUCCEEDED',
 	chorusClientId: string,
 	stepId: string,
@@ -29,7 +27,7 @@ type StepSucceededMessage = {|
 	contextVariables: Object,
 |}
 
-type StepFailedMessage = {|
+export type StepFailedMessage = {|
 	type: 'STEP_FAILED',
 	chorusClientId: string,
 	stepId: string,
@@ -38,14 +36,14 @@ type StepFailedMessage = {|
 	errorText?: string,
 |}
 
-type OutgoingMessage =
+export type OutgoingMessage =
 	ConnectMessage |
 	PublishStepMessage |
 	StepsAlignedMessage |
 	StepSucceededMessage |
 	StepFailedMessage;
 
-type ExecuteStepMessage = {|
+export type ExecuteStepMessage = {|
 	type: 'EXECUTE_STEP',
 	chorusClientId: string,
 	stepId: string,

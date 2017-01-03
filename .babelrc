@@ -1,4 +1,8 @@
 {
 	"presets": ["es2015"],
-	"plugins": ["transform-flow-strip-types"]
+	"plugins": ["transform-flow-strip-types"],
+	"ignore": [
+		"./**/*.test.js",
+		"./**/*.type.js"
+	]
 }
