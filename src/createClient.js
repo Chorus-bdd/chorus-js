@@ -3,7 +3,7 @@
 import uuid from 'uuid';
 
 
-export default function (clientId: string, clientDescription: string = ''): ChorusClient {
+export default function (clientId: string, clientDescription?: string = ''): ChorusClient {
 	if (!clientId) {
 		throw new Error('Please provide `clientId`');
 	}
