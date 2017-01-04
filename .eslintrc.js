@@ -30,10 +30,6 @@ module.exports = {
 
 	env: {
 		browser: true,
-	},
-
-	globals: {
-		// can be used by webpack to perform dead code elimination
-		__DEV__: false,
+		jest: true,
 	},
 };

@@ -1,9 +1,32 @@
 // @flow
-
 import uuid from 'uuid';
+import type {
+	ConnectMessage,
+	PublishStepMessage,
+	StepsAlignedMessage,
+	StepSucceededMessage,
+	StepFailedMessage,
+	OutgoingMessage,
+	ExecuteStepMessage,
+} from './messages.type';
+import openWebSocket from './openWebSocket';
 
 
-export default function (clientId: string, clientDescription: string = ''): ChorusClient {
+export interface ChorusClient {
+	getSocket(): WebSocket,
+	open(url: string): Promise<Event>,
+	close(): void,
+	connect(): void,
+	publishStep(
+		pattern: string,
+		callback: (...args: Array<string>) => number | string | void,
+		technicalDescription?: string,
+		pendingMessage?: string,
+	): void,
+	stepsAligned(): void,
+}
+
+export default function (clientId: string, clientDescription?: string = ''): ChorusClient {
 	if (!clientId) {
 		throw new Error('Please provide `clientId`');
 	}
@@ -52,9 +75,15 @@ export default function (clientId: string, clientDescription: string = ''): Chor
 	}
 
 	const client: ChorusClient = {
+		// we unfortunately have to expose the private socket publicly
+		// so that we can spy on its methods in our tests
+		getSocket(): WebSocket {
+			return _socket;
+		},
+
 		open(url: string): Promise<Event> {
 			return new Promise((resolve, reject) => {
-				_socket = new WebSocket(url);
+				_socket = openWebSocket(url);
 				_socket.addEventListener('open', resolve);
 				_socket.addEventListener('error', reject);
 				_socket.addEventListener('message', _onMessage);

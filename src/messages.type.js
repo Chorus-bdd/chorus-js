@@ -1,51 +1,53 @@
-/* eslint-disable no-unused-vars */
-
-type ConnectMessage = {
+// @flow
+// NOTE: using exact object types seems to break flow autocompletion
+// however, there's a fix in master that doesn't seem to have been released yet.
+// we can track it here: https://github.com/facebook/flow/pull/2965
+export type ConnectMessage = {|
 	type: 'CONNECT',
 	chorusClientId: string,
 	description: string,
-}
+|}
 
-type PublishStepMessage = {
+export type PublishStepMessage = {|
 	type: 'PUBLISH_STEP',
 	chorusClientId: string,
 	stepId: string,
 	pattern: string,
 	pendingMessage?: string,
 	technicalDescription?: string,
-}
+|}
 
-type StepsAlignedMessage = {
+export type StepsAlignedMessage = {|
 	type: 'STEPS_ALIGNED',
 	chorusClientId: string,
-}
+|}
 
-type StepSucceededMessage = {
+export type StepSucceededMessage = {|
 	type: 'STEP_SUCCEEDED',
 	chorusClientId: string,
 	stepId: string,
 	executionId: string,
 	result?: number | string | void,
 	contextVariables: Object,
-}
+|}
 
-type StepFailedMessage = {
+export type StepFailedMessage = {|
 	type: 'STEP_FAILED',
 	chorusClientId: string,
 	stepId: string,
 	executionId: string,
 	description?: string,
 	errorText?: string,
-}
+|}
 
-type OutgoingMessage =
+export type OutgoingMessage =
 	ConnectMessage |
 	PublishStepMessage |
 	StepsAlignedMessage |
 	StepSucceededMessage |
 	StepFailedMessage;
 
-type ExecuteStepMessage = {
+export type ExecuteStepMessage = {|
 	type: 'EXECUTE_STEP',
 	chorusClientId: string,
 	stepId: string,
@@ -54,4 +56,4 @@ type ExecuteStepMessage = {
 	arguments: Array<string>,
 	timeoutPeriodSeconds: number,
 	contextVariables: Object,
-}
+|}
