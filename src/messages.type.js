@@ -1,4 +1,7 @@
 // @flow
+// NOTE: using exact object types seems to break flow autocompletion
+// however, there's a fix in master that doesn't seem to have been released yet.
+// we can track it here: https://github.com/facebook/flow/pull/2965
 export type ConnectMessage = {|
 	type: 'CONNECT',
 	chorusClientId: string,
