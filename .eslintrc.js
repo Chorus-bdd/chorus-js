@@ -32,9 +32,4 @@ module.exports = {
 		browser: true,
 		jest: true,
 	},
-
-	globals: {
-		// can be used by webpack to perform dead code elimination
-		__DEV__: false,
-	},
 };
