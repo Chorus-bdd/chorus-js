@@ -1,3 +1,4 @@
+// @flow
 export type ConnectMessage = {|
 	type: 'CONNECT',
 	chorusClientId: string,
