@@ -1,3 +1,5 @@
+https://travis-ci.org/Chorus-bdd/Chorus-JS.svg?branch=master
+
 # chorus-js
 A Chorus Javascript Client.
 
