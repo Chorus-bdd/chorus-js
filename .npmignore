@@ -1,7 +1,9 @@
+/chorus-interpreter
 /example
 /flow-typed
 /git-hooks
 .*
 *.log
 CONTRIBUTING.md
+e2e
 webpack.config.js

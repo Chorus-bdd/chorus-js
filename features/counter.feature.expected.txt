@@ -1,0 +1,25 @@
+Feature: I can use the counter
+  Scenario: Feature-Start
+    #! StepServer start                                                                                          PASSED
+    Given I open Chrome                                                                                          PASSED
+  Scenario: I can read the counter
+    Given I navigate to http://localhost:9000                                                                    PASSED
+    And StepServer client SimpleStepPublisher is connected                                                       PASSED
+    Then the counter value is 0                                                                                  PASSED  0
+  Scenario: I can increment the counter
+    Given I navigate to http://localhost:9000                                                                    PASSED
+    And StepServer client SimpleStepPublisher is connected                                                       PASSED
+    Given the counter value is 0                                                                                 PASSED  0
+    When I click on the increment button                                                                         PASSED
+    Then the counter value is 1                                                                                  PASSED  1
+  Scenario: I can decrement the counter
+    Given I navigate to http://localhost:9000                                                                    PASSED
+    And StepServer client SimpleStepPublisher is connected                                                       PASSED
+    Given the counter value is 0                                                                                 PASSED  0
+    When I click on the decrement button                                                                         PASSED
+    Then the counter value is -1                                                                                 PASSED  -1
+
+
+Features  (total:1) (passed:1) (failed:0)
+Scenarios (total:3) (passed:3) (failed:0)
+Steps     (total:15) (passed:15) (failed:0) (undefined:0) (pending:0) (skipped:0)

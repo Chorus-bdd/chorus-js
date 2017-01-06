@@ -1,0 +1,95 @@
+#!/bin/sh
+
+WEBPACK_DEV_SERVER_PORT=9000
+CHORUS_INTERPRETER_DIR="./chorus-interpreter"
+FEATURES_DIR="./features"
+
+
+function info {
+	local yellow=`tput setaf 3`
+	local reset=`tput sgr0`
+	echo "${yellow}‣ $1${reset}"
+}
+
+function success {
+	local green=`tput setaf 2`
+	local reset=`tput sgr0`
+	echo "${green}✓ $1${reset}"
+}
+
+function error {
+	local red=`tput setaf 1`
+	local reset=`tput sgr0`
+	echo "${red}✗ $1${reset}"
+}
+
+function show_error_and_exit {
+	error "$1"
+	exit $2
+}
+
+function exit_if_non_zero {
+	if [ $1 -ne 0 ]; then
+		show_error_and_exit "$2" $1
+	fi
+}
+
+function kill_webpack_dev_server {
+	PID=$(lsof -ti :$WEBPACK_DEV_SERVER_PORT)
+	if [ ! -z "$PID" ]; then
+		kill -9 $PID
+	fi
+}
+
+
+if [ ! -d "$CHORUS_INTERPRETER_DIR" ]; then
+	info "Installing latest version of the Chorus interpreter..."
+
+	# get HTML page content
+	HTML=$(curl -L -s http://github.com/nickebbutt/Chorus/releases/latest)
+	exit_if_non_zero $? "Could not find Chorus interpreter latest release HTML page!"
+
+	# find the wanted <a> tag
+	TAR_A_TAG=$(echo "$HTML" | grep -s -E 'href="(.*chorus.*\.tar)')
+	exit_if_non_zero $? "Could not find Chorus interpreter release link tag!"
+
+	# extract href value
+	TAR_RELATIVE_LINK=$(awk -F\" '{print $2}' <<< $TAR_A_TAG)
+	exit_if_non_zero $? "Could not extract Chorus interpreter TAR link!"
+
+	# build absolute url for tar file
+	TAR_URL="http://github.com$TAR_RELATIVE_LINK"
+
+	# download and untar
+	rm -rf "$CHORUS_INTERPRETER_DIR"
+	mkdir "$CHORUS_INTERPRETER_DIR"
+	curl -L $TAR_URL | tar -xz - -C "$CHORUS_INTERPRETER_DIR" --strip-components=1
+	exit_if_non_zero $? "Could not download latest version of the Chorus interpreter!"
+else
+	info "Using already installed version of the Chorus interpreter..."
+fi
+
+info "Starting JS client..."
+npm start&
+
+# Kill webpack-dev-server (was running because of `npm start`)
+trap kill_webpack_dev_server SIGINT SIGTERM EXIT
+
+info "Executing chorus tests..."
+for feature in $FEATURES_DIR/*.feature
+do
+	info "Executing feature: $feature..."
+	$CHORUS_INTERPRETER_DIR/chorus -f $feature > $feature.actual.txt
+
+	info "Diffing output..."
+	git diff --no-index --color-words -w $feature.expected.txt $feature.actual.txt
+	DIFF_EXIT_CODE=$?
+
+	if [ $DIFF_EXIT_CODE -eq 0 ]; then
+		success "Chorus interpreter output has not changed. ($feature)"
+	fi
+
+	rm $feature.actual.txt
+
+	exit_if_non_zero $DIFF_EXIT_CODE "Actual Chorus interpreter output was different from expected! ($feature)"
+done

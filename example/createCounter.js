@@ -40,6 +40,12 @@ export default function (rootElem: HTMLElement): Counter {
 	}
 
 	clientOpened.then(() => {
+		// simple regression steps
+		client.publishStep('.* call a step with a result', () => 'hello!');
+		client.publishStep('.* call a step without a result', () => {});
+		client.publishStep('.* call a step which fails', () => { expect(true).toBe(false); });
+
+		// app steps
 		client.publishStep('.* click.* decrement button', _handleDecrementButtonClick);
 		client.publishStep('.* click.* increment button', _handleIncrementButtonClick);
 		client.publishStep('.* counter value is (.*)', _checkValue);
