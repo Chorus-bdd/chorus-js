@@ -63,8 +63,9 @@ if [ ! -d "$CHORUS_INTERPRETER_DIR" ]; then
 	# download and untar
 	rm -rf "$CHORUS_INTERPRETER_DIR"
 	mkdir "$CHORUS_INTERPRETER_DIR"
-	curl -L $TAR_URL | tar -x - -C "$CHORUS_INTERPRETER_DIR" --strip-components=1
+	curl -L $TAR_URL | tar -x
 	exit_if_non_zero $? "Could not download latest version of the Chorus interpreter!"
+	ls .
 else
 	info "Using already installed version of the Chorus interpreter..."
 fi
