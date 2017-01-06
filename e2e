@@ -5,36 +5,36 @@ CHORUS_INTERPRETER_DIR="./chorus-interpreter"
 FEATURES_DIR="./features"
 
 
-function info {
+info () {
 	yellow=`tput setaf 3`
 	reset=`tput sgr0`
 	echo "${yellow}‣ $1${reset}"
 }
 
-function success {
+success () {
 	green=`tput setaf 2`
 	reset=`tput sgr0`
 	echo "${green}✓ $1${reset}"
 }
 
-function error {
+error () {
 	red=`tput setaf 1`
 	reset=`tput sgr0`
 	echo "${red}✗ $1${reset}"
 }
 
-function show_error_and_exit {
+show_error_and_exit () {
 	error "$1"
 	exit $2
 }
 
-function exit_if_non_zero {
+exit_if_non_zero () {
 	if [ $1 -ne 0 ]; then
 		show_error_and_exit "$2" $1
 	fi
 }
 
-function kill_webpack_dev_server {
+kill_webpack_dev_server () {
 	PID=$(lsof -ti :$WEBPACK_DEV_SERVER_PORT)
 	if [ ! -z "$PID" ]; then
 		kill -9 $PID
