@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 WEBPACK_DEV_SERVER_PORT=9000
 CHORUS_INTERPRETER_DIR="./chorus-interpreter"
