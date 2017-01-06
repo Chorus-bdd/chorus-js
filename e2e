@@ -6,20 +6,20 @@ FEATURES_DIR="./features"
 
 
 function info {
-	local yellow=`tput setaf 3`
-	local reset=`tput sgr0`
+	yellow=`tput setaf 3`
+	reset=`tput sgr0`
 	echo "${yellow}‣ $1${reset}"
 }
 
 function success {
-	local green=`tput setaf 2`
-	local reset=`tput sgr0`
+	green=`tput setaf 2`
+	reset=`tput sgr0`
 	echo "${green}✓ $1${reset}"
 }
 
 function error {
-	local red=`tput setaf 1`
-	local reset=`tput sgr0`
+	red=`tput setaf 1`
+	reset=`tput sgr0`
 	echo "${red}✗ $1${reset}"
 }
 
