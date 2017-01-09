@@ -69,6 +69,14 @@ else
 	info "Using already installed version of the Chorus interpreter..."
 fi
 
+CHROME_DRIVER_PATH=$(which chromedriver)
+exit_if_non_zero $? "Could not find chromedriver executable"
+echo "Using chromedriver at ${CHROME_DRIVER_PATH}"
+
+CHROME_PATH=$(which google-chrome)
+exit_if_non_zero $? "Could not find google-chrome executable"
+echo "Using google-chrome at ${CHROME_PATH}"
+
 info "Starting JS client..."
 npm start&
 
