@@ -1,6 +1,4 @@
-[![Build Status](https://travis-ci.org/Chorus-bdd/Chorus-JS.svg?branch=master)](https://travis-ci.org/Chorus-bdd/Chorus-JS)
-
-# chorus-js
+# chorus-js [![Build Status](https://travis-ci.org/Chorus-bdd/chorus-js.svg?branch=master)](https://travis-ci.org/Chorus-bdd/chorus-js)
 A Chorus Javascript Client.
 
 ## Contributing

@@ -40,12 +40,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Chorus-bdd/Chorus-JS.git"
+    "url": "git+https://github.com/Chorus-bdd/chorus-js.git"
   },
   "author": "Benoît Grélard <benoit.grelard@gmail.com> (http://www.artisologic.com)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Chorus-bdd/Chorus-JS/issues"
+    "url": "https://github.com/Chorus-bdd/chorus-js/issues"
   },
-  "homepage": "https://github.com/Chorus-bdd/Chorus-JS#readme"
+  "homepage": "https://github.com/Chorus-bdd/chorus-js#readme"
 }
