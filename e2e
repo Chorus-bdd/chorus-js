@@ -1,6 +1,5 @@
 #!/bin/bash
 
-WEBPACK_DEV_SERVER_PORT=9000
 CHORUS_INTERPRETER_DIR="./chorus-interpreter"
 FEATURES_DIR="./features"
 
@@ -35,10 +34,18 @@ exit_if_non_zero () {
 }
 
 kill_webpack_dev_server () {
-	PID=$(lsof -ti :$WEBPACK_DEV_SERVER_PORT)
-	if [ ! -z "$PID" ]; then
-		kill -9 $PID
+	if [ ! -z "$WEBPACK_DEV_SERVER_PID" ]; then
+		echo "Killing webpack-dev-server using pid $WEBPACK_DEV_SERVER_PID"
+		kill -SIGINT $WEBPACK_DEV_SERVER_PID
+		sleep 1
+
+		if [ $? -ne 0 ] ; then
+			echo "Failed to kill webpack-dev-server"
+		else
+			echo "Killed webpack-dev-server"
+		fi
 	fi
+	return 0
 }
 
 
@@ -73,12 +80,16 @@ CHROME_DRIVER_PATH=$(which chromedriver)
 exit_if_non_zero $? "Could not find chromedriver executable"
 echo "Using chromedriver at ${CHROME_DRIVER_PATH}"
 
-CHROME_PATH=$(which google-chrome)
-exit_if_non_zero $? "Could not find google-chrome executable"
-echo "Using google-chrome at ${CHROME_PATH}"
+if [ "$TRAVIS" ]; then
+	CHROME_PATH=$(which google-chrome)
+	exit_if_non_zero $? "Could not find google-chrome executable"
+	echo "Using google-chrome at ${CHROME_PATH}"
+fi
 
 info "Starting JS client..."
-npm start&
+npm start &
+WEBPACK_DEV_SERVER_PID=$!
+echo "webpack-dev-server pid is $WEBPACK_DEV_SERVER_PID"
 
 # Kill webpack-dev-server (was running because of `npm start`)
 trap kill_webpack_dev_server SIGINT SIGTERM EXIT
