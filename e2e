@@ -2,6 +2,7 @@
 
 CHORUS_INTERPRETER_DIR="./chorus-interpreter"
 FEATURES_DIR="./features"
+WEBPACK_DEV_SERVER_PORT=9000
 
 
 info () {
@@ -35,7 +36,7 @@ exit_if_non_zero () {
 
 kill_webpack_dev_server () {
 	if [ ! -z "$WEBPACK_DEV_SERVER_PID" ]; then
-		echo "Killing webpack-dev-server using pid $WEBPACK_DEV_SERVER_PID"
+		echo "Killing npm webpack-dev-server parent using pid $WEBPACK_DEV_SERVER_PID"
 		kill -SIGINT $WEBPACK_DEV_SERVER_PID
 		sleep 1
 
@@ -44,6 +45,12 @@ kill_webpack_dev_server () {
 		else
 			echo "Killed webpack-dev-server"
 		fi
+	fi
+
+	PID=$(lsof -ti :$WEBPACK_DEV_SERVER_PORT)
+	if [ ! -z "$PID" ]; then
+	    echo "Killing npm webpack server using pid $PID"
+		kill -SIGINT $PID
 	fi
 	return 0
 }
