@@ -7,14 +7,15 @@
     "start": "webpack-dev-server --progress --colors --inline --hot --quiet",
     "prebuild": "npm run clean",
     "build": "NODE_ENV=production babel ./src --out-dir ./lib",
-    "test": "npm run lint && npm run typecheck && npm run test:unit",
+    "test": "npm run lint && npm run typecheck && npm run test:unit && npm run test:e2e",
     "test:unit": "jest",
+	"test:e2e": "./e2e",
     "preversion": "npm run test",
     "version": "npm run build",
     "postversion": "git push --follow-tags",
     "lint": "eslint . --ignore-pattern lib/ --ignore-pattern flow-typed/",
     "typecheck": "flow",
-    "clean": "rimraf ./lib",
+    "clean": "rimraf ./chorus-interpreter && rimraf ./lib && rimraf ./tests/*.actual.* && rimraf *.log",
     "hook": "cp ./git-hooks/* ./.git/hooks"
   },
   "dependencies": {
@@ -39,12 +40,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Chorus-bdd/Chorus-JS.git"
+    "url": "git+https://github.com/Chorus-bdd/chorus-js.git"
   },
   "author": "Benoît Grélard <benoit.grelard@gmail.com> (http://www.artisologic.com)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Chorus-bdd/Chorus-JS/issues"
+    "url": "https://github.com/Chorus-bdd/chorus-js/issues"
   },
-  "homepage": "https://github.com/Chorus-bdd/Chorus-JS#readme"
+  "homepage": "https://github.com/Chorus-bdd/chorus-js#readme"
 }

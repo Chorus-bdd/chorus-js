@@ -1,5 +1,7 @@
 .DS_Store
 *.log
 
-lib
-node_modules
+/chorus-interpreter
+/features/*.actual.*
+/lib
+/node_modules
