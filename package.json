@@ -1,6 +1,6 @@
 {
   "name": "chorus-js",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "A Chorus Javascript Client",
   "main": "lib/index.js",
   "scripts": {
@@ -9,7 +9,7 @@
     "build": "NODE_ENV=production babel ./src --out-dir ./lib",
     "test": "npm run lint && npm run typecheck && npm run test:unit && npm run test:e2e",
     "test:unit": "jest",
-	"test:e2e": "./e2e",
+    "test:e2e": "./e2e",
     "preversion": "npm run test",
     "version": "npm run build",
     "postversion": "git push --follow-tags",
