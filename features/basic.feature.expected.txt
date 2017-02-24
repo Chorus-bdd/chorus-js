@@ -11,7 +11,7 @@ Feature: Basic steps
     Given I navigate to http://localhost:9000                                                                    PASSED
     And StepServer client SimpleStepPublisher is connected                                                       PASSED
     Check I can call a step with a result                                                                        PASSED  hello!
-    And I can call a step which fails                                                                            FAILED  (WebSocketClientStepInvoker:158)-StepFailedException
+    And I can call a step which fails                                                                            FAILED  (WebSocketClientStepInvoker:158)-StepFailedException Expected true to be false
 
 
 Features  (total:1) (passed:0) (failed:1)

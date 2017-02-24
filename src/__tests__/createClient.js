@@ -198,7 +198,7 @@ describe('createClient', () => {
 						chorusClientId: 'clientId',
 						stepId: 'uuid',
 						executionId: 'executionId',
-						description: undefined,
+						description: 'not ok',
 						errorText: undefined,
 					};
 					expect(sendSpy).toHaveBeenCalledWith(

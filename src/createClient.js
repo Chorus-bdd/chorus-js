@@ -68,6 +68,7 @@ export default function (clientId: string, clientDescription?: string = ''): Cho
 					chorusClientId: clientId,
 					stepId,
 					executionId,
+					description: error.message,
 				};
 				_sendMessage(message);
 			}
