@@ -7,7 +7,9 @@ type Counter = {
 	destroy(): void,
 };
 
-export default function (rootElem: HTMLElement): Counter {
+export default function (rootElem: ?HTMLElement): Counter {
+	if (!rootElem) { throw new Error('Cannot find `rootElem`'); }
+
 	let _value: number = 0;
 
 	const _decrementButton: HTMLElement | null = rootElem.querySelector('.decrement');
@@ -39,16 +41,35 @@ export default function (rootElem: HTMLElement): Counter {
 		return _value;
 	}
 
+	let _fakeSuccessValue = false;
+	let _fakeErrorValue = false;
+
 	clientOpened.then(() => {
 		// simple regression steps
 		client.publishStep('.* call a step with a result', () => 'hello!');
 		client.publishStep('.* call a step without a result', () => {});
 		client.publishStep('.* call a step which fails', () => { expect(true).toBe(false); });
+		client.publishStep('.* call a step which succeeds asychronously', () => {
+			setTimeout(() => { _fakeSuccessValue = true; }, 500);
+			expect(_fakeSuccessValue).toBe(true);
+			return String(_fakeSuccessValue);
+		}, {
+			retryDuration: 1000,
+		});
+		client.publishStep('.* call a step which times out', () => {
+			setTimeout(() => { _fakeErrorValue = true; }, 1000);
+			expect(_fakeErrorValue).toBe(true);
+			return String(_fakeErrorValue);
+		}, {
+			retryDuration: 500,
+		});
 
 		// app steps
 		client.publishStep('.* click.* decrement button', _handleDecrementButtonClick);
 		client.publishStep('.* click.* increment button', _handleIncrementButtonClick);
 		client.publishStep('.* counter value is (.*)', _checkValue);
+
+		// done publishing
 		client.stepsAligned();
 	});
 

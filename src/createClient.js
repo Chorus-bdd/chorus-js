@@ -12,6 +12,13 @@ import type {
 import openWebSocket from './openWebSocket';
 
 
+type PublishStepMessageOptions = {
+	pendingMessage?: string,
+	technicalDescription?: string,
+	retryDuration?: number,
+	retryInterval?: number,
+}
+
 export interface ChorusClient {
 	getSocket(): WebSocket,
 	open(url: string): Promise<Event>,
@@ -20,8 +27,7 @@ export interface ChorusClient {
 	publishStep(
 		pattern: string,
 		callback: (...args: Array<string>) => number | string | void,
-		technicalDescription?: string,
-		pendingMessage?: string,
+		options?: PublishStepMessageOptions,
 	): void,
 	stepsAligned(): void,
 }
@@ -108,8 +114,7 @@ export default function (clientId: string, clientDescription?: string = ''): Cho
 		publishStep(
 			pattern: string,
 			callback: Function,
-			technicalDescription?: string,
-			pendingMessage?: string,
+			options?: PublishStepMessageOptions = {},
 		): void {
 			const stepId = uuid.v4();
 			_callbacks[stepId] = callback;
@@ -119,8 +124,7 @@ export default function (clientId: string, clientDescription?: string = ''): Cho
 				chorusClientId: clientId,
 				stepId,
 				pattern,
-				pendingMessage,
-				technicalDescription,
+				...options,
 			};
 			_sendMessage(message);
 		},
