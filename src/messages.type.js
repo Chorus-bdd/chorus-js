@@ -5,6 +5,9 @@ export type ConnectMessage = {|
 	description: string,
 |}
 
+// NOTE: We're using inexact type here because there's a bug where
+// exact types are not compatible with the spreading operator
+// https://github.com/facebook/flow/issues/1793
 export type PublishStepMessage = {
 	type: 'PUBLISH_STEP',
 	chorusClientId: string,
