@@ -2,5 +2,5 @@
 import createCounter from './createCounter';
 
 
-const rootElem: HTMLElement | null = document.querySelector('.counter');
-createCounter(rootElem || document.body);
+const rootElem: ?HTMLElement = document.querySelector('.counter');
+createCounter(rootElem);

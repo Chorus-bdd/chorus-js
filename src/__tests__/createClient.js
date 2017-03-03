@@ -105,7 +105,12 @@ describe('createClient', () => {
 				const webSocket = client.getSocket();
 				const sendSpy = jest.fn();
 				webSocket.send = sendSpy;
-				client.publishStep('pattern', () => {}, 'technicalDescription', 'pendingMessage');
+				client.publishStep('pattern', () => {}, {
+					pendingMessage: 'pendingMessage',
+					technicalDescription: 'technicalDescription',
+					retryDuration: 0,
+					retryInterval: 0,
+				});
 				const message = {
 					type: 'PUBLISH_STEP',
 					chorusClientId: 'clientId',
@@ -113,6 +118,8 @@ describe('createClient', () => {
 					pattern: 'pattern',
 					pendingMessage: 'pendingMessage',
 					technicalDescription: 'technicalDescription',
+					retryDuration: 0,
+					retryInterval: 0,
 				};
 				expect(sendSpy).toHaveBeenCalledWith(
 					JSON.stringify(message),
