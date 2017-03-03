@@ -49,7 +49,7 @@ export default function (rootElem: ?HTMLElement): Counter {
 		client.publishStep('.* call a step with a result', () => 'hello!');
 		client.publishStep('.* call a step without a result', () => {});
 		client.publishStep('.* call a step which fails', () => { expect(true).toBe(false); });
-		client.publishStep('.* call a step which succeeds asychronously', () => {
+		client.publishStep('.* call a step which succeeds asynchronously', () => {
 			setTimeout(() => { _fakeSuccessValue = true; }, 500);
 			expect(_fakeSuccessValue).toBe(true);
 			return String(_fakeSuccessValue);

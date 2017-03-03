@@ -1,15 +1,15 @@
-Uses: StepServer
+Uses: StepRegistry
 Uses: Selenium
 
 Feature: I can use the counter
 
-  #! StepServer start
+  #! StepRegistry start
   Feature-Start:
     Given I open Chrome
 
   Background:
     Given I navigate to http://localhost:9000
-    And StepServer client SimpleStepPublisher is connected
+    And StepRegistry client SimpleStepPublisher is connected
 
   Scenario: I can read the counter
     Then the counter value is 0

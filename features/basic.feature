@@ -1,15 +1,15 @@
-Uses: StepServer
+Uses: StepRegistry
 Uses: Selenium
 
 Feature: Basic steps
 
-  #! StepServer start
+  #! StepRegistry start
   Feature-Start:
     Given I open Chrome
 
   Background:
     Given I navigate to http://localhost:9000
-    And StepServer client SimpleStepPublisher is connected
+    And StepRegistry client SimpleStepPublisher is connected
 
   Scenario: I can call steps with and without a result
     Check I can call a step with a result
@@ -20,5 +20,5 @@ Feature: Basic steps
     And I can call a step which fails
 
   Scenario: I can call steps which are async
-    Check I can call a step which succeeds asychronously
+    Check I can call a step which succeeds asynchronously
     And I can call a step which times out
