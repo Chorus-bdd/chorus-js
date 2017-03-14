@@ -11,9 +11,13 @@ export interface ChorusContext {
 export default function (initialContext: ContextVariables): ChorusContext {
 	const _context = { ...initialContext };
 
-	return {
+	const context = {
 		get: (key: string): void => _context[key],
 		set: (key: string, value: ContextValue): void => { _context[key] = value; },
 		toObject: (): ContextVariables => ({ ..._context }),
 	};
+
+	Object.freeze(context);
+
+	return context;
 }

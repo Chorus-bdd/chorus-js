@@ -21,6 +21,13 @@ describe('createContext', () => {
 		}));
 	});
 
+	it('prevents interacting directly with the context variables', () => {
+		expect(() => {
+			(context: any).a = 'hello';
+		}).toThrow();
+		expect(context.get('a')).toBe(1);
+	});
+
 	describe('get', () => {
 		it('acts as a getter', () => {
 			expect(context.get('a')).toBe(1);
