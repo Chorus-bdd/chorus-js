@@ -1,6 +1,7 @@
 // @flow
 import uuid from 'uuid';
 import type {
+	StepCallbackReturn,
 	ConnectMessage,
 	PublishStepMessage,
 	StepsAlignedMessage,
@@ -8,7 +9,8 @@ import type {
 	StepFailedMessage,
 	OutgoingMessage,
 	ExecuteStepMessage,
-} from './messages.type';
+} from './shared-types';
+import createContext, { type ContextVariables, type ChorusContext } from './createContext';
 import openWebSocket from './openWebSocket';
 
 
@@ -19,6 +21,8 @@ type PublishStepMessageOptions = {
 	retryInterval?: number,
 }
 
+type StepCallback = (Array<string>, ChorusContext) => StepCallbackReturn;
+
 export interface ChorusClient {
 	getSocket(): WebSocket,
 	open(url: string): Promise<Event>,
@@ -26,7 +30,7 @@ export interface ChorusClient {
 	connect(): void,
 	publishStep(
 		pattern: string,
-		callback: (...args: Array<string>) => number | string | void,
+		callback: StepCallback,
 		options?: PublishStepMessageOptions,
 	): void,
 	stepsAligned(): void,
@@ -38,7 +42,7 @@ export default function (clientId: string, clientDescription?: string = ''): Cho
 	}
 
 	let _socket: WebSocket;
-	const _callbacks: {[stepId: string]: (...args: Array<string>) => number | string | void} = {};
+	const _callbacks: { [stepId: string]: StepCallback } = {};
 
 	function _sendMessage(message: OutgoingMessage): void {
 		if (!_socket) { return; }
@@ -55,17 +59,20 @@ export default function (clientId: string, clientDescription?: string = ''): Cho
 
 		if (incomingMessage.type === 'EXECUTE_STEP') {
 			const callback = _callbacks[incomingMessage.stepId];
-			const { stepId, executionId, contextVariables } = incomingMessage;
+			const { stepId, executionId, arguments: args, contextVariables } = incomingMessage;
 
+			const contextVars: ContextVariables = contextVariables;
+			const context: ChorusContext = createContext(contextVars);
 			try {
-				const result: number | string | void = callback(...incomingMessage.arguments);
+				const result: StepCallbackReturn = callback(args, context);
+				const updatedContextVariables = context.toObject();
 				const message: StepSucceededMessage = {
 					type: 'STEP_SUCCEEDED',
 					chorusClientId: clientId,
 					stepId,
 					executionId,
 					result,
-					contextVariables,
+					contextVariables: updatedContextVariables,
 				};
 				_sendMessage(message);
 			} catch (error) {

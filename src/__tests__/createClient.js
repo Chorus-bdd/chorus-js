@@ -1,4 +1,5 @@
-import createClient from '../createClient';
+// @flow
+import createClient, { ChorusClient } from '../createClient';
 import { SUCCESS_URL, FAILING_URL } from '../__mocks__/openWebSocket';
 
 
@@ -29,6 +30,13 @@ describe('createClient', () => {
 
 	it('returns a `Client` object', () => {
 		const client = createClient('clientId', 'clientDescription');
+		expect(client).toEqual(expect.objectContaining({
+			open: expect.any(Function),
+			close: expect.any(Function),
+			connect: expect.any(Function),
+			publishStep: expect.any(Function),
+			stepsAligned: expect.any(Function),
+		}));
 		expect(typeof client.open).toBe('function');
 		expect(typeof client.close).toBe('function');
 		expect(typeof client.connect).toBe('function');
@@ -69,7 +77,7 @@ describe('createClient', () => {
 			return client.open(SUCCESS_URL).then(() => {
 				const webSocket = client.getSocket();
 				const closeSpy = jest.fn();
-				webSocket.close = closeSpy;
+				(webSocket: any).close = closeSpy;
 				client.close();
 				expect(closeSpy).toHaveBeenCalled();
 			});
@@ -83,7 +91,7 @@ describe('createClient', () => {
 			return client.open(SUCCESS_URL).then(() => {
 				const webSocket = client.getSocket();
 				const sendSpy = jest.fn();
-				webSocket.send = sendSpy;
+				(webSocket: any).send = sendSpy;
 				client.connect();
 				const message = {
 					type: 'CONNECT',
@@ -99,17 +107,17 @@ describe('createClient', () => {
 
 	describe('`publishStep`', () => {
 		it('calls `send` on the open websocket', () => {
-			const client = createClient('clientId', 'clientDescription');
+			const client: ChorusClient = createClient('clientId', 'clientDescription');
 
 			return client.open(SUCCESS_URL).then(() => {
 				const webSocket = client.getSocket();
 				const sendSpy = jest.fn();
-				webSocket.send = sendSpy;
+				(webSocket: any).send = sendSpy;
 				client.publishStep('pattern', () => {}, {
 					pendingMessage: 'pendingMessage',
 					technicalDescription: 'technicalDescription',
-					retryDuration: 0,
-					retryInterval: 0,
+					retryDuration: 2000,
+					retryInterval: 100,
 				});
 				const message = {
 					type: 'PUBLISH_STEP',
@@ -118,8 +126,8 @@ describe('createClient', () => {
 					pattern: 'pattern',
 					pendingMessage: 'pendingMessage',
 					technicalDescription: 'technicalDescription',
-					retryDuration: 0,
-					retryInterval: 0,
+					retryDuration: 2000,
+					retryInterval: 100,
 				};
 				expect(sendSpy).toHaveBeenCalledWith(
 					JSON.stringify(message),
@@ -135,7 +143,7 @@ describe('createClient', () => {
 			return client.open(SUCCESS_URL).then(() => {
 				const webSocket = client.getSocket();
 				const sendSpy = jest.fn();
-				webSocket.send = sendSpy;
+				(webSocket: any).send = sendSpy;
 				client.stepsAligned();
 				const message = {
 					type: 'STEPS_ALIGNED',
@@ -155,11 +163,31 @@ describe('createClient', () => {
 			return client.open(SUCCESS_URL).then(() => {
 				const webSocket = client.getSocket();
 				const stepCallbackSpy = jest.fn();
-				client.publishStep('pattern', stepCallbackSpy, 'technicalDescription', 'pendingMessage');
-				webSocket.__simulateServerMessage();
+				client.publishStep('pattern', stepCallbackSpy);
+				(webSocket: any).__simulateServerMessage();
 				// simulate the wait for an async server message
 				fixAsyncErrorHandling(done, () => {
-					expect(stepCallbackSpy).toHaveBeenCalledWith('one', 'two', 'three');
+					expect(stepCallbackSpy).toHaveBeenCalled();
+				});
+			});
+		});
+
+		it('passes `argments` and `context` to the step callback', done => {
+			const client = createClient('clientId', 'clientDescription');
+
+			return client.open(SUCCESS_URL).then(() => {
+				const webSocket = client.getSocket();
+				const stepCallbackSpy = jest.fn();
+				client.publishStep('pattern', stepCallbackSpy);
+				(webSocket: any).__simulateServerMessage();
+				// simulate the wait for an async server message
+				fixAsyncErrorHandling(done, () => {
+					expect(stepCallbackSpy.mock.calls[0][0]).toEqual(['one', 'two', 'three']);
+					expect(stepCallbackSpy.mock.calls[0][1]).toEqual(expect.objectContaining({
+						get: expect.any(Function),
+						set: expect.any(Function),
+						toObject: expect.any(Function),
+					}));
 				});
 			});
 		});
@@ -170,9 +198,9 @@ describe('createClient', () => {
 			return client.open(SUCCESS_URL).then(() => {
 				const webSocket = client.getSocket();
 				const sendSpy = jest.fn();
-				webSocket.send = sendSpy;
-				client.publishStep('pattern', () => 3, 'technicalDescription', 'pendingMessage');
-				webSocket.__simulateServerMessage();
+				(webSocket: any).send = sendSpy;
+				client.publishStep('pattern', () => 3);
+				(webSocket: any).__simulateServerMessage();
 				// simulate the wait for an async server message
 				fixAsyncErrorHandling(done, () => {
 					const message = {
@@ -190,15 +218,46 @@ describe('createClient', () => {
 			});
 		});
 
+		it('sends the context back correctly', done => {
+			const client = createClient('clientId', 'clientDescription');
+
+			return client.open(SUCCESS_URL).then(() => {
+				const webSocket = client.getSocket();
+				const sendSpy = jest.fn();
+				(webSocket: any).send = sendSpy;
+				client.publishStep('pattern', (args, context) => {
+					context.set('projectName', 'chorus-js');
+					return 3;
+				});
+				(webSocket: any).__simulateServerMessage({ withContext: true });
+				// simulate the wait for an async server message
+				fixAsyncErrorHandling(done, () => {
+					const message = {
+						type: 'STEP_SUCCEEDED',
+						chorusClientId: 'clientId',
+						stepId: 'uuid',
+						executionId: 'executionId',
+						result: 3,
+						contextVariables: {
+							projectName: 'chorus-js',
+						},
+					};
+					expect(sendSpy).toHaveBeenCalledWith(
+						JSON.stringify(message),
+					);
+				});
+			});
+		});
+
 		it('reports a failure', done => {
 			const client = createClient('clientId', 'clientDescription');
 
 			return client.open(SUCCESS_URL).then(() => {
 				const webSocket = client.getSocket();
 				const sendSpy = jest.fn();
-				webSocket.send = sendSpy;
-				client.publishStep('pattern', () => { throw new Error('not ok'); }, 'technicalDescription', 'pendingMessage');
-				webSocket.__simulateServerMessage();
+				(webSocket: any).send = sendSpy;
+				client.publishStep('pattern', () => { throw new Error('not ok'); });
+				(webSocket: any).__simulateServerMessage();
 				fixAsyncErrorHandling(done, () => {
 					const message = {
 						type: 'STEP_FAILED',
