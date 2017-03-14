@@ -1,4 +1,6 @@
 // @flow
+export type StepCallbackReturn = number | string | void;
+
 export type ConnectMessage = {|
 	type: 'CONNECT',
 	chorusClientId: string,
@@ -29,7 +31,7 @@ export type StepSucceededMessage = {|
 	chorusClientId: string,
 	stepId: string,
 	executionId: string,
-	result?: number | string | void,
+	result?: StepCallbackReturn,
 	contextVariables: Object,
 |}
 

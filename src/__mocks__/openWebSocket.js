@@ -1,3 +1,4 @@
+// @flow
 const openWebSocketModule = jest.genMockFromModule('../openWebSocket');
 
 const SUCCESS_URL = 'ws://localhost';
@@ -19,7 +20,7 @@ function openWebSocketMock(url) {
 		},
 		send() {},
 		close() {},
-		__simulateServerMessage() {
+		__simulateServerMessage({ withContext = false } = {}) {
 			setTimeout(() => {
 				_listeners
 					.filter(l => l.eventName === 'message')
@@ -33,7 +34,9 @@ function openWebSocketMock(url) {
 							pattern: 'pattern',
 							arguments: ['one', 'two', 'three'],
 							timeoutPeriodSeconds: 60,
-							contextVariables: {},
+							contextVariables: withContext ? {
+								projectName: 'chorus',
+							} : {},
 						}),
 					}));
 			});

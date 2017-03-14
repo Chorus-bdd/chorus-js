@@ -36,11 +36,6 @@ export default function (rootElem: ?HTMLElement): Counter {
 	_decrementButton.addEventListener('click', _handleDecrementButtonClick);
 	_incrementButton.addEventListener('click', _handleIncrementButtonClick);
 
-	function _checkValue(expected) {
-		expect(Number(expected)).toEqual(_value);
-		return _value;
-	}
-
 	let _fakeSuccessValue = false;
 	let _fakeErrorValue = false;
 
@@ -63,11 +58,20 @@ export default function (rootElem: ?HTMLElement): Counter {
 		}, {
 			retryDuration: 500,
 		});
+		client.publishStep('.*in chorus-js \'(.*)\' has the value \'(.*)\'', ([name, value], context) => {
+			expect(context.get(name)).toBe(value);
+		});
+		client.publishStep('.*set the \'(.*)\' variable to \'(.*)\' in chorus-js', ([name, value], context) => {
+			context.set(name, value);
+		});
 
 		// app steps
 		client.publishStep('.*click.* decrement button', _handleDecrementButtonClick);
 		client.publishStep('.*click.* increment button', _handleIncrementButtonClick);
-		client.publishStep('.*counter value is (.*)', _checkValue);
+		client.publishStep('.*counter value is (.*)', ([value]) => {
+			expect(Number(value)).toEqual(_value);
+			return _value;
+		});
 
 		// done publishing
 		client.stepsAligned();
