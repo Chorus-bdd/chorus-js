@@ -3,20 +3,20 @@ Feature: Basic steps
     #! StepRegistry start                                                                                        PASSED
     Given I open Chrome                                                                                          PASSED
   Scenario: I can call steps with and without a result
-    Given I navigate to http://localhost:9000                                                                    PASSED
+    Given I navigate to http://localhost:9999                                                                    PASSED
     And StepRegistry client SimpleStepPublisher is connected                                                     PASSED
     Check I can call a step with a result                                                                        PASSED  hello!
     And I can call a step without a result                                                                       PASSED
   Scenario: I can call steps which fail
-    Given I navigate to http://localhost:9000                                                                    PASSED
+    Given I navigate to http://localhost:9999                                                                    PASSED
     And StepRegistry client SimpleStepPublisher is connected                                                     PASSED
     Check I can call a step with a result                                                                        PASSED  hello!
-    And I can call a step which fails                                                                            FAILED  (WebSocketClientStepInvoker:174)-StepFailedException Expected true to be false
+    And I can call a step which fails                                                                            FAILED  (WebSocketClientStepInvoker:181)-StepFailedException Expected true to be false
   Scenario: I can call steps which are async
-    Given I navigate to http://localhost:9000                                                                    PASSED
+    Given I navigate to http://localhost:9999                                                                    PASSED
     And StepRegistry client SimpleStepPublisher is connected                                                     PASSED
-    Check I can call a step which succeeds asynchronously                                                         PASSED  true
-    And I can call a step which times out                                                                        FAILED  (WebSocketClientStepInvoker:174)-StepFailedException Expected false to be true
+    Check I can call a step which succeeds asynchronously                                                        PASSED  true
+    And I can call a step which times out                                                                        FAILED  (WebSocketClientStepInvoker:181)-StepFailedException Expected false to be true
 
 
 Features  (total:1) (passed:0) (failed:1)

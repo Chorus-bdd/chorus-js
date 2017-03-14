@@ -32,7 +32,7 @@ const config = {
 	devtool: 'cheap-module-source-map',
 	devServer: {
 		contentBase: exampleRootPath,
-		port: process.env.PORT || 9000,
+		port: process.env.PORT || 9999,
 	},
 };
 

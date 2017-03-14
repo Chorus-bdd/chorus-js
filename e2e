@@ -2,7 +2,7 @@
 
 CHORUS_INTERPRETER_DIR="./chorus-interpreter"
 FEATURES_DIR="./features"
-WEBPACK_DEV_SERVER_PORT=9000
+WEBPACK_DEV_SERVER_PORT=9999
 
 
 info () {

@@ -8,7 +8,7 @@ Feature: Basic steps
     Given I open Chrome
 
   Background:
-    Given I navigate to http://localhost:9000
+    Given I navigate to http://localhost:9999
     And StepRegistry client SimpleStepPublisher is connected
 
   Scenario: I can call steps with and without a result
