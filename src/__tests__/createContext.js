@@ -1,8 +1,8 @@
 // @flow
-import createContext, { type Context } from '../createContext';
+import createContext, { type ChorusContext } from '../createContext';
 
 
-let context: Context = createContext({});
+let context: ChorusContext = createContext({});
 
 beforeEach(() => {
 	context = createContext({ a: 1, b: 2 });

@@ -10,7 +10,7 @@ import type {
 	OutgoingMessage,
 	ExecuteStepMessage,
 } from './shared-types';
-import createContext, { type ContextVariables, type Context } from './createContext';
+import createContext, { type ContextVariables, type ChorusContext } from './createContext';
 import openWebSocket from './openWebSocket';
 
 
@@ -21,7 +21,7 @@ type PublishStepMessageOptions = {
 	retryInterval?: number,
 }
 
-type StepCallback = (Array<string>, Context) => StepCallbackReturn;
+type StepCallback = (Array<string>, ChorusContext) => StepCallbackReturn;
 
 export interface ChorusClient {
 	getSocket(): WebSocket,
@@ -62,7 +62,7 @@ export default function (clientId: string, clientDescription?: string = ''): Cho
 			const { stepId, executionId, arguments: args, contextVariables } = incomingMessage;
 
 			const contextVars: ContextVariables = contextVariables;
-			const context: Context = createContext(contextVars);
+			const context: ChorusContext = createContext(contextVars);
 			try {
 				const result: StepCallbackReturn = callback(args, context);
 				const updatedContextVariables = context.toObject();
