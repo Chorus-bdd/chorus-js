@@ -1,5 +1,6 @@
 /chorus-interpreter
 /example
+/features
 /flow-typed
 /git-hooks
 .*
