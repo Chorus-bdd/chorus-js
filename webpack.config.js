@@ -16,10 +16,10 @@ const config = {
 		filename: 'bundle.js',
 	},
 	module: {
-		loaders: [
+		rules: [
 			{
 				test: /\.js$/,
-				loader: 'babel',
+				loader: 'babel-loader',
 				include: [srcPath, exampleRootPath],
 			},
 		],
