@@ -11,12 +11,12 @@ Feature: Basic steps
     Given I navigate to http://localhost:9999                                                                    PASSED
     And StepRegistry client SimpleStepPublisher is connected                                                     PASSED
     Check I can call a step with a result                                                                        PASSED  hello!
-    And I can call a step which fails                                                                            FAILED  (WebSocketClientStepInvoker:181)-StepFailedException Expected true to be false
+    And I can call a step which fails                                                                            FAILED  Expected true to be false (WebSocketClientStepInvoker:181)-StepFailedException
   Scenario: I can call steps which are async
     Given I navigate to http://localhost:9999                                                                    PASSED
     And StepRegistry client SimpleStepPublisher is connected                                                     PASSED
     Check I can call a step which succeeds asynchronously                                                        PASSED  true
-    And I can call a step which times out                                                                        FAILED  (WebSocketClientStepInvoker:181)-StepFailedException Expected false to be true
+    And I can call a step which times out                                                                        FAILED  Expected false to be true (WebSocketClientStepInvoker:181)-StepFailedException
   Scenario: I can read a variable from the Chorus Context
     Given I navigate to http://localhost:9999                                                                    PASSED
     And StepRegistry client SimpleStepPublisher is connected                                                     PASSED
