@@ -60,7 +60,7 @@ if [ ! -d "$CHORUS_INTERPRETER_DIR" ]; then
 	info "Installing latest version of the Chorus interpreter..."
 
 	# get HTML page content
-	HTML=$(curl -L -s http://github.com/nickebbutt/Chorus/releases/latest)
+	HTML=$(curl -L -s http://github.com/Chorus-bdd/Chorus/releases/latest)
 	exit_if_non_zero $? "Could not find Chorus interpreter latest release HTML page!"
 
 	# find the wanted <a> tag
