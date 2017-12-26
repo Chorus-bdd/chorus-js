@@ -33,7 +33,7 @@ export default function (rootElem: ?HTMLElement): Counter {
 		_setValue(_value + 1);
 	}
 
-	function _resetCounter() : void {
+	function _resetCounter(): void {
 		_setValue(0);
 	}
 
