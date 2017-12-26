@@ -73,6 +73,7 @@ if [ ! -d "$CHORUS_INTERPRETER_DIR" ]; then
 
 	# build absolute url for tar file
 	TAR_URL="http://github.com$TAR_RELATIVE_LINK"
+	echo "Downloading latest Chorus interpreter from ${TAR_URL}"
 
 	# download and untar
 	rm -rf "$CHORUS_INTERPRETER_DIR"

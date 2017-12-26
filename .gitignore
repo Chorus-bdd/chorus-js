@@ -5,3 +5,6 @@
 /features/*.actual.*
 /lib
 /node_modules
+/chorus-js.iml
+/chorus-js.ipr
+/chorus-js.iws

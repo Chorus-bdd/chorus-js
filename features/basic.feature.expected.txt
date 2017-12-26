@@ -1,35 +1,35 @@
 Feature: Basic steps
   Scenario: Feature-Start
-    #! StepRegistry start                                                                                        PASSED
-    Given I open Chrome                                                                                          PASSED
+    Given I start a web socket server                                                                            PASSED
+    And I open Chrome                                                                                            PASSED
   Scenario: I can call steps with and without a result
     Given I navigate to http://localhost:9999                                                                    PASSED
-    And StepRegistry client SimpleStepPublisher is connected                                                     PASSED
+    And I wait for the web socket client SimpleStepPublisher                                                     PASSED
     Check I can call a step with a result                                                                        PASSED  hello!
     And I can call a step without a result                                                                       PASSED
   Scenario: I can call steps which fail
     Given I navigate to http://localhost:9999                                                                    PASSED
-    And StepRegistry client SimpleStepPublisher is connected                                                     PASSED
+    And I wait for the web socket client SimpleStepPublisher                                                     PASSED
     Check I can call a step with a result                                                                        PASSED  hello!
     And I can call a step which fails                                                                            FAILED  Expected true to be false (WebSocketClientStepInvoker:181)-StepFailedException
   Scenario: I can call steps which are async
     Given I navigate to http://localhost:9999                                                                    PASSED
-    And StepRegistry client SimpleStepPublisher is connected                                                     PASSED
+    And I wait for the web socket client SimpleStepPublisher                                                     PASSED
     Check I can call a step which succeeds asynchronously                                                        PASSED  true
     And I can call a step which times out                                                                        FAILED  Expected false to be true (WebSocketClientStepInvoker:181)-StepFailedException
   Scenario: I can read a variable from the Chorus Context
     Given I navigate to http://localhost:9999                                                                    PASSED
-    And StepRegistry client SimpleStepPublisher is connected                                                     PASSED
+    And I wait for the web socket client SimpleStepPublisher                                                     PASSED
     Given I create a variable outbound with the value one                                                        PASSED
     Then in chorus-js 'outbound' has the value 'one'                                                             PASSED
   Scenario: I can set a variable in the Chorus Context
     Given I navigate to http://localhost:9999                                                                    PASSED
-    And StepRegistry client SimpleStepPublisher is connected                                                     PASSED
+    And I wait for the web socket client SimpleStepPublisher                                                     PASSED
     When I set the 'inbound' variable to 'two' in chorus-js                                                      PASSED
     Then the variable inbound has the value two                                                                  PASSED
   Scenario: I can overwrite a variable in the Chorus Context
     Given I navigate to http://localhost:9999                                                                    PASSED
-    And StepRegistry client SimpleStepPublisher is connected                                                     PASSED
+    And I wait for the web socket client SimpleStepPublisher                                                     PASSED
     Given I create a variable outbound with the value two                                                        PASSED
     When I set the 'outbound' variable to 'three' in chorus-js                                                   PASSED
     Then the variable outbound has the value three                                                               PASSED

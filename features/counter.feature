@@ -1,15 +1,15 @@
-Uses: StepRegistry
+Uses: Web Sockets
 Uses: Selenium
 
 Feature: I can use the counter
 
-  #! StepRegistry start
   Feature-Start:
-    Given I open Chrome
+    Given I start a web socket server
+    And I open Chrome
 
   Background:
     Given I navigate to http://localhost:9999
-    And StepRegistry client SimpleStepPublisher is connected
+    And I wait for the web socket client SimpleStepPublisher
 
   Scenario: I can read the counter
     Then the counter value is 0
