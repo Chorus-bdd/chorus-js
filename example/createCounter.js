@@ -33,6 +33,10 @@ export default function (rootElem: ?HTMLElement): Counter {
 		_setValue(_value + 1);
 	}
 
+	function _resetCounter(): void {
+		_setValue(0);
+	}
+
 	_decrementButton.addEventListener('click', _handleDecrementButtonClick);
 	_incrementButton.addEventListener('click', _handleIncrementButtonClick);
 
@@ -72,6 +76,7 @@ export default function (rootElem: ?HTMLElement): Counter {
 			expect(Number(value)).toEqual(_value);
 			return _value;
 		});
+		client.publishStep('.*reset the counter', _resetCounter);
 
 		// done publishing
 		client.stepsAligned();

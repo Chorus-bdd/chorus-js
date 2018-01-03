@@ -1,16 +1,14 @@
-Uses: StepRegistry
+Uses: Web Sockets
 Uses: Selenium
 Uses: Chorus Context
 
 Feature: Basic steps
 
-  #! StepRegistry start
   Feature-Start:
-    Given I open Chrome
-
-  Background:
-    Given I navigate to http://localhost:9999
-    And StepRegistry client SimpleStepPublisher is connected
+    Given I start a web socket server
+    And I open Chrome
+    And I navigate to http://localhost:9999
+    And I wait for the web socket client SimpleStepPublisher
 
   Scenario: I can call steps with and without a result
     Check I can call a step with a result

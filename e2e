@@ -60,7 +60,7 @@ if [ ! -d "$CHORUS_INTERPRETER_DIR" ]; then
 	info "Installing latest version of the Chorus interpreter..."
 
 	# get HTML page content
-	HTML=$(curl -L -s http://github.com/nickebbutt/Chorus/releases/latest)
+	HTML=$(curl -L -s http://github.com/Chorus-bdd/Chorus/releases/latest)
 	exit_if_non_zero $? "Could not find Chorus interpreter latest release HTML page!"
 
 	# find the wanted <a> tag
@@ -73,6 +73,7 @@ if [ ! -d "$CHORUS_INTERPRETER_DIR" ]; then
 
 	# build absolute url for tar file
 	TAR_URL="http://github.com$TAR_RELATIVE_LINK"
+	echo "Downloading latest Chorus interpreter from ${TAR_URL}"
 
 	# download and untar
 	rm -rf "$CHORUS_INTERPRETER_DIR"
@@ -105,7 +106,7 @@ info "Executing chorus tests..."
 for feature in $FEATURES_DIR/*.feature
 do
 	info "Executing feature: $feature..."
-	$CHORUS_INTERPRETER_DIR/chorus -f $feature > $feature.actual.txt
+	$CHORUS_INTERPRETER_DIR/chorus -f $feature | tee $feature.actual.txt
 
 	info "Diffing output..."
 	git diff --no-index --color-words -w $feature.expected.txt $feature.actual.txt
