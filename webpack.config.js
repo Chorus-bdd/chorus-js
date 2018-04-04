@@ -33,6 +33,7 @@ const config = {
 	devServer: {
 		contentBase: exampleRootPath,
 		port: process.env.PORT || 9999,
+		disableHostCheck: true,
 	},
 };
 

@@ -6,5 +6,5 @@
 .*
 *.log
 CONTRIBUTING.md
-e2e
+e2eOld
 webpack.config.js

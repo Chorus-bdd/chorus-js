@@ -1,0 +1,60 @@
+version: "2.1"
+services:
+
+  hub:
+    image: selenium/hub:3.9.1
+    ports:
+      - "4444:4444"
+
+#  firefox:
+#    image: selenium/node-firefox-debug:3.9.1
+#    ports:
+#      - "5911:5900"
+#    environment:
+#    - HUB_PORT_4444_TCP_ADDR=hub
+#    - HUB_PORT_4444_TCP_PORT=4444
+#    depends_on:
+#      - hub
+#    healthcheck:
+#      test: bash -c "wget -O - http://hub:4444/grid/console 2>&1 | grep \"browserName=firefox\" "
+#      interval: 10s
+#      retries: 13
+
+  chrome:
+    image: selenium/node-chrome-debug:3.9.1
+    ports:
+      - "5912:5900"
+    environment:
+    - HUB_PORT_4444_TCP_ADDR=hub
+    - HUB_PORT_4444_TCP_PORT=4444
+    depends_on:
+      - hub
+    healthcheck:
+      test: bash -c "wget -O - http://hub:4444/grid/console 2>&1 | grep \"browserName=chrome\" "
+      interval: 10s
+      retries: 13
+
+  chorus-js-example-app:
+    image: node:8.9.1
+    ports:
+      - "9000:80"
+    working_dir: /usr/src/app
+    volumes:
+      - ../:/usr/src/app
+    command: bash -c "PORT=80 npm start"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost && echo 'OK'"]
+      interval: 20s
+      retries: 15
+
+  chorus-interpreter:
+    image: chorusbdd/chorus-interpreter:3.0.0.DEV47
+    ports:
+      - "9080:9080"
+    volumes:
+      - ../features:/features
+    command: sleep infinity
+
+
+
+
