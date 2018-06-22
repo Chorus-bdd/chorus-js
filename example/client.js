@@ -1,15 +1,17 @@
 // @flow
 import createClient from '../src';
 
-
 const client = createClient('SimpleStepPublisher', 'A simple chorus step publisher');
 export default client;
 
+//Detect whether chorus was enabled by setting a http param in the URL when loading the app
 const urlParams = new URLSearchParams(window.location.search);
-const chorusHostAndPort = urlParams.get('chorusHostAndPort');
+const chorusEnabled = urlParams.get('chorusEnabled');
 
-export const clientOpened : Promise<void> = chorusHostAndPort ?
+//If Chorus was enabled we need to open a connection to the Chrous interpreter which 
+//is running in the container named 'chorus-interpreter' on port 9080
+export const clientOpened : Promise<void> = chorusEnabled ?
 	client
-		.open(`ws://${chorusHostAndPort}`)
+		.open(`ws://chorus-interpreter:9080`)
 		.then(() => client.connect()) :
 	new Promise(() => {});

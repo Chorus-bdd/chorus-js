@@ -48,7 +48,7 @@ services:
       retries: 15
 
   chorus-interpreter:
-    image: chorusbdd/chorus-interpreter:3.0.0.DEV47
+    image: chorusbdd/chorus-interpreter:3.0.0
     ports:
       - "9080:9080"
     volumes:
