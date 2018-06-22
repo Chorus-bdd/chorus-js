@@ -52,7 +52,7 @@ services:
     ports:
       - "9080:9080"
     volumes:
-      - ../features:/features
+      - ./features:/features
     command: sleep infinity
 
 

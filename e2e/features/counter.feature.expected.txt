@@ -2,7 +2,7 @@ Feature: I can use the counter
   Scenario: Feature-Start
     Given I start a web socket server                                                                            PASSED  
     And I open the RemoteWebDriver browser                                                                       PASSED  
-    And I navigate to http://chorus-js-example-app:80?chorusHostAndPort=chorus-interpreter:9080                  PASSED  
+    And I navigate to http://chorus-js-example-app:80?chorusEnabled=true                                         PASSED  
     And I wait for the web socket client SimpleStepPublisher                                                     PASSED  
   Scenario: I can read the counter
     Given I reset the counter                                                                                    PASSED  

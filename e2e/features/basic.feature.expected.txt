@@ -2,7 +2,7 @@ Feature: Basic steps
   Scenario: Feature-Start
     Given I start a web socket server                                                                            PASSED  
     And I open the RemoteWebDriver browser                                                                       PASSED  
-    And I navigate to http://chorus-js-example-app:80?chorusHostAndPort=chorus-interpreter:9080                  PASSED  
+    And I navigate to http://chorus-js-example-app:80?chorusEnabled=true                                         PASSED  
     And I wait for the web socket client SimpleStepPublisher                                                     PASSED  
   Scenario: I can call steps with and without a result
     Check I can call a step with a result                                                                        PASSED  hello!
