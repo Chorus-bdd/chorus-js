@@ -1,6 +1,11 @@
 # chorus-js
 A Chorus Javascript Client.
 
+## Building
+
+The e2e tests for this package run the chorus-interpreter using docker-compose and require both
+docker and docker-compose to be available.
+
 ## Status
 [![npm](https://img.shields.io/npm/v/chorus-js.svg)](https://github.com/Chorus-bdd/chorus-js/releases)
 
