@@ -4,7 +4,7 @@ import createClient from '../src';
 const client = createClient('SimpleStepPublisher', 'A simple chorus step publisher');
 export default client;
 
-// Detect whether chorus was enabled by setting a http param in the URL when loading the app
+// Detect whether chorus was enabled by getting a http param in the URL when loading the app
 const urlParams = new URLSearchParams(window.location.search);
 const chorusEnabled = urlParams.get('chorusEnabled');
 
