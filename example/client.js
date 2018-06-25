@@ -14,4 +14,4 @@ export const clientOpened : Promise<void> = chorusEnabled ?
 	client
 		.open('ws://chorus-interpreter:9080')
 		.then(() => client.connect()) :
-	new Promise(() => {});
+	Promise.reject('The chorus connection is not enabled');
