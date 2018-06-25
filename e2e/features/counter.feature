@@ -1,12 +1,13 @@
 Uses: Web Sockets
 Uses: Selenium
+Uses: Chorus Context
 
 Feature: I can use the counter
 
   Feature-Start:
     Given I start a web socket server
-    And I open Chrome
-    And I navigate to http://localhost:9999
+    And I open the RemoteWebDriver browser
+    And I navigate to ${exampleAppURL}
     And I wait for the web socket client SimpleStepPublisher
 
   Background:

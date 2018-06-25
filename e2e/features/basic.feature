@@ -6,8 +6,8 @@ Feature: Basic steps
 
   Feature-Start:
     Given I start a web socket server
-    And I open Chrome
-    And I navigate to http://localhost:9999
+    And I open the RemoteWebDriver browser
+    And I navigate to ${exampleAppURL}
     And I wait for the web socket client SimpleStepPublisher
 
   Scenario: I can call steps with and without a result
@@ -23,14 +23,14 @@ Feature: Basic steps
     And I can call a step which times out
 
   Scenario: I can read a variable from the Chorus Context
-    Given I create a variable outbound with the value one
+    Given I create a context variable outbound with the value one
     Then in chorus-js 'outbound' has the value 'one'
 
   Scenario: I can set a variable in the Chorus Context
     When I set the 'inbound' variable to 'two' in chorus-js
-    Then the variable inbound has the value two
+    Then the context variable inbound has the value two
 
   Scenario: I can overwrite a variable in the Chorus Context
-    Given I create a variable outbound with the value two
+    Given I create a context variable outbound with the value two
     When I set the 'outbound' variable to 'three' in chorus-js
-    Then the variable outbound has the value three
+    Then the context variable outbound has the value three
